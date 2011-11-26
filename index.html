@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" manifest="offline.manifest">
+<head>
+  <meta charset="utf-8">
+  
+  <link rel="stylesheet" href="css/jquery.mobile-1.0a3.css"  media="screen" title="jquery mobile" charset="utf-8">
+  <link rel="stylesheet" href="css/main.css"  media="screen" charset="utf-8">
+  
+      <style type="text/css">
+        body {
+            font-family: arial, verdana, sans-serif;
+            font-size: 12px;
+        }
+	
+	img.displayed {
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	  border-style: solid;
+	  border-width: medium;
+	}
+	
+	figcaption {
+	  text-align:center;
+	  line-height: 200%;
+	}
+	
+        .dww img {
+            width: 30px;
+            height: 30px;
+            margin: 5px 30px;
+        }
+    </style>
+
+</head>
+<body>
+  <!--
+  Home Page
+  -->
+  <div id="home" data-role="page">
+    <div data-role="header">
+      <h1>Food / Skin Tracker</h1>
+      <!-- 
+      <a href="#new" data-role="button" data-rel="dialog" data-transition="pop" data-icon="plus" class="ui-btn-right">
+        New
+      </a>
+      -->
+    </div>
+    
+    <div data-role="content">
+      <a href="#new" data-rel="dialog" data-transition="pop" data-role="button" data-icon="plus" data-theme="b">
+        Add a Food Item
+      </a>
+      
+      <ul data-role="listview" data-inset="true">
+        <li><a href="#all">All Meals</a></li>
+      </ul>
+      <br/>
+      <figure>
+          <img class="displayed" src="img/paleoWoman.jpg" alt="Eating Paleo!"/>
+	  <figcaption>For Skin & Eating Tips & Recipes, see the following resources: 
+            <br/><a href="http://blog.sethroberts.net/">Seth Roberts' Blog</a></li>
+            <br/><a href="http://curetogether.com/">Cure Together</a></li>
+            <br/><a href="http://www.mayoclinic.com/health/skin-care/SN00003">Mayo Clinic Skin Care Tips</a></li>
+            <br/><a href="http://escholarship.org/uc/item/2xc2h866">Self-experimentation as a source of new ideas by Dr. Seth Roberts</a></li>
+            <br/><a href="http://paleohacks.com">Paleo Hacks</a></li>
+          </figcaption>
+      </figure>
+    </div>
+    
+  </div>
+  
+  <!--
+  New Meal Form
+  -->
+  <div id="new" data-role="page">
+    <div data-role="header">
+      <h1>Add a Food Item</h1>
+    </div>
+    
+    <div data-role="content">
+      <form action="#" method="post">
+        
+        <div data-role="fieldcontain">
+          <label for="body">Description</label>
+          <textarea id="body" name="body" ></textarea>
+        </div>
+        
+        <div data-role="fieldcontain">
+          <label for="timestamp">Date / Time</label>
+          <input type="datetime" id="timestamp" name="timestamp" value="">
+        </div>
+
+        <div data-role="fieldcontain">
+	  <label for="rating">Skin looks/feels (1 is awful, 10 is perfect):</label>
+ 	  <input type="range" name="rating" id="rating" value="5" min="0" max="10"  />
+        </div>
+        
+        <button data-icon="check" data-theme="b">Save</button>
+      </form>
+    </div>
+    
+  </div>
+  
+  <!--
+  List of Meals (Alphabetical)
+  -->
+  <div id="all" data-role="page">
+    
+    <div data-role="header">
+      <a href="#home" data-role="button"  data-icon="arrow-l" data-rel="back">
+        Back
+      </a>
+      <h1>All Food Items</h1>
+    </div>
+    
+    <div data-role="content">
+      <ul data-role="listview" id="all_meals">
+      </ul>
+    </div>
+  </div>
+  
+  <!--
+  Nearest Meals
+  -->
+  <div id="nearest" data-role="page">
+    
+    <div data-role="header">
+      <a href="#home" data-role="button"  data-icon="arrow-l" data-rel="back">
+        Back
+      </a>
+      <h1>Nearest Paleo Meals</h1>
+      <a href="#" class="locate" data-role="button"  data-icon="refresh" class="ui-btn-right" data-theme="e">
+        Locate
+      </a>
+    </div>
+    
+    <div data-role="content">
+      <ul data-role="listview" id="nearest_meals">
+      </ul>
+    </div>
+  </div>
+  
+  
+  <!--
+  List of Meal detail pages
+  -->
+  <div id="meal-detail-list">
+  </div>
+  
+  <script type="text/template" id="meal-list-item-template">
+    <a href="#meal_<%= meal.id %>" >
+      <%= meal.get('body') %>
+      <!-- (<%= meal.distanceFromCurrent() %>) -->
+    </a>
+  </script>
+  
+  <script type="text/template" id="meal-detail-template">
+    <div data-role="header">
+      <a href="#home" data-role="button"  data-icon="arrow-l" data-rel="back">  
+        Back
+      </a>
+      <h1><%= meal.get('body') %></h1>
+    </div>
+    <div data-role="content">
+      <h3>Meal Description:</h3>
+      <%= meal.get('body') %>
+      
+      <% if(meal.isTimeStampTagged()){ %>
+        <h3>Timestamp : </h3>
+        <%= meal.get('timestamp') %>
+      <% } /*end if*/ %>
+      
+      <h3>Skin Looks/Feels:</h3>
+      <%= meal.get('rating') %>
+    </div>
+  </script>
+  
+  <script src="js/jquery-1.5.1.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/underscore.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/backbone.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/backbone.localStorage.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/application.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/jquery.mobile-1.0a3.js" type="text/javascript" charset="utf-8"></script>
+
+</body>
+</html>
+
